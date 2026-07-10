@@ -1,0 +1,5 @@
+$ touch target/sona-staging/foo/artifact.jar target/sona-bundle/bundle.zip
+$ exists target/sona-staging/ target/sona-staging/foo/artifact.jar target/sona-bundle/ target/sona-bundle/bundle.zip
+
+> clean
+$ absent target/sona-staging target/sona-bundle

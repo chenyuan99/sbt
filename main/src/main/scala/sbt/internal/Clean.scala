@@ -123,9 +123,16 @@ private[sbt] object Clean {
           val streamsGlobs =
             (streamsKey.toSeq ++ stampsKey)
               .map(k => manager(k).cacheDirectory.toPath.toGlob / **)
+          // Sonatype staging/bundle directories live outside of `target` and are not
+          // tracked as file outputs, so a plain `clean` would otherwise leave them behind.
+          val sonaGlobs =
+            if full then
+              (stagingDirectory.?.value.toList ++ sonaBundleDirectory.?.value.toList)
+                .map(_.toPath.toGlob / **)
+            else Nil
           ((scope / fileOutputs).value.filter { g =>
             targetDir.fold(true)(g.base.startsWith)
-          } ++ streamsGlobs)
+          } ++ streamsGlobs ++ sonaGlobs)
             .foreach { g =>
               val filter: Path => Boolean = { path =>
                 !g.matches(path) || excludeFilter(path)

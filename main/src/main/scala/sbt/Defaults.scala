@@ -287,10 +287,11 @@ object Defaults extends BuildCommon with DefExtra {
       csrSameVersions :== Nil,
       stagingDirectory := (ThisBuild / baseDirectory).value / "target" / "sona-staging",
       localStaging := Some(Resolver.file("local-staging", stagingDirectory.value)),
+      sonaBundleDirectory := (ThisBuild / baseDirectory).value / "target" / "sona-bundle",
       sonaBundle := Publishing
         .makeBundle(
           stagingDirectory.value.toPath(),
-          ((ThisBuild / baseDirectory).value / "target" / "sona-bundle" / "bundle.zip").toPath()
+          (sonaBundleDirectory.value / "bundle.zip").toPath()
         )
         .toFile(),
       sonaBundle / aggregate :== false,
